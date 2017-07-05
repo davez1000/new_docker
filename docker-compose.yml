@@ -2,82 +2,100 @@ version: '2'
 
 services:
 
-# Nginx container.
-  testing-nginx:
-    container_name: testing-nginx
-    image: nginx:latest
+  # Busybox persistent datastore
+  datastore:
+    extends:
+      file: docker-compose-common.yml
+      service: datastore
+
+  # Nginx container.
+  web:
+    extends:
+      file: docker-compose-common.yml
+      service: web
     ports:
       - 8888:80
     links:
-      - testing-php
+      - php
     volumes:
       - .:/var/www
-      - ./conf/nginx/default.vhost.conf:/etc/nginx/conf.d/default.conf
 
-# PHP-FPM container.
-  testing-php:
-    container_name: testing-php
-#    image: supermassive/testing-docker-php-fpm
-    image: testphp
+  # PHP-FPM container.
+  php:
+    extends:
+      file: docker-compose-common.yml
+      service: php
     ports:
       - 9001:9001
       - 9000:9000
     links:
-      - testing-mysql
+      - db
 #      - testing-mailhog
     environment:
      - XDEBUG_CONFIG=${XDEBUG_CONFIG}
      - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
     volumes:
       - .:/var/www
-    volumes_from:
-      - testing-mysql
+#    volumes_from:
+#      - db
 
-# MySQL container.
-  testing-mysql:
-    container_name: testing-mysql
-    image: mysql:5.7
+  # Composer container.
+  composer:
+    extends:
+      file: docker-compose-common.yml
+      service: composer
+#    container_name: composer
+#    image: composer/composer
+
+  # MySQL container.
+  db:
+    extends:
+      file: docker-compose-common.yml
+      service: db
     ports:
-      - 3306:3306
+      - 3307:3306
     environment:
-     - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-     - MYSQL_DATABASE=${MYSQL_DATABASE}
-     - MYSQL_USER=${MYSQL_USER}
-     - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-    volumes:
-      - ./mysql-data:/var/lib/mysql
-      - /usr/bin
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes_from:
+      - datastore
+#    volumes:
+#      - ./mysql-data:/var/lib/mysql
+#      - /usr/bin
 
-# Phpmyadmin container.
-  testing-phpmyadmin:
-    container_name: testing-phpmyadmin
-    image: phpmyadmin/phpmyadmin
+  # Phpmyadmin container.
+  phpmyadmin:
+    extends:
+      file: docker-compose-common.yml
+      service: phpmyadmin
     ports:
       - 8080:80
     links:
-      - testing-mysql
+      - db
     environment:
       - PMA_HOST=${PMA_HOST}
       - PMA_PORT=${PMA_PORT}
 
-# Mailhog Container
-#  testing-mailhog:
+  # Mailhog Container
+#  mailhog:
 #    image: mailhog/mailhog
-#    container_name: testing-mailhog
+#    container_name: mailhog
 #    working_dir: /home/mailhog
 #    ports:
 #      - 1025:1025
 #      - 8025:8025
 
-# Portainer Container
-#  testing-portainer:
-#    container_name: testing-portainer
-#    image: portainer/portainer
-#    ports:
-#      - 9002:9000
-#    volumes:
-#      - /var/run/docker.sock:/var/run/docker.sock
-#      - portainer:/data
+  # Portainer Container
+  portainer:
+    container_name: portainer
+    image: portainer/portainer
+    ports:
+      - 9002:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer:/data
 
-#volumes:
-#  portainer:
+volumes:
+  portainer:

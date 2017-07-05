@@ -1,0 +1,48 @@
+version: '2'
+
+services:
+
+  datastore:
+    image: busybox
+    container_name: datastore
+    volumes:
+      - /var/lib/mysql
+    command:
+      /bin/true
+
+  db:
+    build:
+      context: ./docker/db
+  #    args:
+  #      xdebug: 'false'
+  #      cache: 'false'
+    container_name: db
+
+  web:
+    build:
+      context: ./docker/web
+    container_name: web
+    volumes:
+      - ./docker/web/resources/default.vhost.conf:/etc/nginx/conf.d/default.conf
+    restart: always
+
+  php:
+    build:
+      context: ./docker/php
+    container_name: php
+  #  volumes:
+  #    - ./docker/web/resources/default.vhost.conf:/etc/nginx/conf.d/default.conf
+  #  volumes_from:
+  #    - datastore
+    restart: always
+
+  composer:
+    build:
+      context: ./docker/composer
+    container_name: composer
+
+  phpmyadmin:
+    build:
+      context: ./docker/phpmyadmin
+    container_name: phpmyadmin
+
