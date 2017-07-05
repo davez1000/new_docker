@@ -78,18 +78,18 @@ services:
       - PMA_HOST=${PMA_HOST}
       - PMA_PORT=${PMA_PORT}
 
-# Mailhog Container
-#  testing-mailhog:
+  # Mailhog Container
+#  mailhog:
 #    image: mailhog/mailhog
-#    container_name: testing-mailhog
+#    container_name: mailhog
 #    working_dir: /home/mailhog
 #    ports:
 #      - 1025:1025
 #      - 8025:8025
 
   # Portainer Container
-  testing-portainer:
-    container_name: testing-portainer
+  portainer:
+    container_name: portainer
     image: portainer/portainer
     ports:
       - 9002:9000
