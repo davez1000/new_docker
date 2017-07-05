@@ -1,3 +1,3 @@
-# Build
+# Build image
 
-`docker build --no-cache -t testphp .`
+`docker build --no-cache -t davephp .`
