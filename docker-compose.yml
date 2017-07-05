@@ -74,14 +74,14 @@ services:
 #      - 8025:8025
 
 # Portainer Container
-#  testing-portainer:
-#    container_name: testing-portainer
-#    image: portainer/portainer
-#    ports:
-#      - 9002:9000
-#    volumes:
-#      - /var/run/docker.sock:/var/run/docker.sock
-#      - portainer:/data
+  testing-portainer:
+    container_name: testing-portainer
+    image: portainer/portainer
+    ports:
+      - 9002:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer:/data
 
-#volumes:
-#  portainer:
+volumes:
+  portainer:
