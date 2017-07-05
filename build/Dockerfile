@@ -2,7 +2,7 @@ FROM php:7.1.4-fpm
 
 # Install PHP extensions and dependencies
 RUN apt-get update && \
-    apt-get install -y curl libpcre3-dev zlib1g-dev libfreetype6-dev libjpeg62-turbo-dev libpng12-dev && \
+    apt-get install -y libpcre3-dev zlib1g-dev libfreetype6-dev libjpeg62-turbo-dev libpng12-dev && \
     docker-php-ext-install zip && \
     docker-php-ext-install pdo_mysql && \
     docker-php-ext-install mysqli && \
