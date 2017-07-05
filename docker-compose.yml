@@ -33,6 +33,10 @@ services:
     volumes_from:
       - testing-mysql
 
+  testing-composer:
+    container_name: testing-composer
+    image: composer/composer
+
 # MySQL container.
   testing-mysql:
     container_name: testing-mysql
