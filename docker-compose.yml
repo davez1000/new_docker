@@ -1,0 +1,83 @@
+version: '2'
+
+services:
+
+# Nginx container.
+  testing-nginx:
+    container_name: testing-nginx
+    image: nginx:latest
+    ports:
+      - 8888:80
+    links:
+      - testing-php
+    volumes:
+      - .:/var/www
+      - ./conf/nginx/default.vhost.conf:/etc/nginx/conf.d/default.conf
+
+# PHP-FPM container.
+  testing-php:
+    container_name: testing-php
+#    image: supermassive/testing-docker-php-fpm
+    image: testphp
+    ports:
+      - 9001:9001
+      - 9000:9000
+    links:
+      - testing-mysql
+#      - testing-mailhog
+    environment:
+     - XDEBUG_CONFIG=${XDEBUG_CONFIG}
+     - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
+    volumes:
+      - .:/var/www
+    volumes_from:
+      - testing-mysql
+
+# MySQL container.
+  testing-mysql:
+    container_name: testing-mysql
+    image: mysql:5.7
+    ports:
+      - 3306:3306
+    environment:
+     - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+     - MYSQL_DATABASE=${MYSQL_DATABASE}
+     - MYSQL_USER=${MYSQL_USER}
+     - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - /usr/bin
+
+# Phpmyadmin container.
+  testing-phpmyadmin:
+    container_name: testing-phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8080:80
+    links:
+      - testing-mysql
+    environment:
+      - PMA_HOST=${PMA_HOST}
+      - PMA_PORT=${PMA_PORT}
+
+# Mailhog Container
+#  testing-mailhog:
+#    image: mailhog/mailhog
+#    container_name: testing-mailhog
+#    working_dir: /home/mailhog
+#    ports:
+#      - 1025:1025
+#      - 8025:8025
+
+# Portainer Container
+#  testing-portainer:
+#    container_name: testing-portainer
+#    image: portainer/portainer
+#    ports:
+#      - 9002:9000
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - portainer:/data
+
+#volumes:
+#  portainer:
