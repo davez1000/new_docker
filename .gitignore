@@ -9,4 +9,4 @@ mysql-data
 
 # Site folders
 /web
-/public
+/laravel
