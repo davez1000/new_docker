@@ -6,3 +6,7 @@ portainer-data
 
 # MySQL data
 mysql-data
+
+# Site folders
+/web
+/public
