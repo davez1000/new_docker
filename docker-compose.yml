@@ -68,7 +68,11 @@ services:
 #    volumes:
 #      - ./mysql-data:/var/lib/mysql
 #      - /usr/bin
-
+  drush:
+    image: drush/drush
+    container_name: drupal_drush
+    volumes_from:
+      - web
   # Phpmyadmin container.
   phpmyadmin:
     extends:
@@ -103,3 +107,4 @@ services:
 
 volumes:
   portainer:
+

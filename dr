@@ -1,0 +1,10 @@
+#!/bin/sh
+
+#export PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
+echo "Current working directory: '"$(pwd)"'"
+#docker run --rm -v $(pwd):/app -v ~/.ssh:/root/.ssh composer/composer $@
+#docker run --rm -v $(pwd):/app --link db --link web drush/drush $@
+#docker run --rm -v $(pwd):/app --link db --link web --net newdocker_default drush/drush $@
+time docker-compose run --rm --no-deps drush $@ --root=/var/www/web
+#docker exec -i php /var/www/vendor/drush/drush/drush --root=/var/www/web --uri=http://192.168.99.100:8888 $@
+
